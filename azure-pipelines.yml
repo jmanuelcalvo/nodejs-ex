@@ -1,8 +1,10 @@
 trigger:
 - master
 
+#pool:
+#  vmImage: 'ubuntu-latest'
 pool:
-  vmImage: 'ubuntu-latest'
+  name: Local Agent
 
 variables:
   OPENSHIFT_URL: 'https://api.tu-cluster:6443'   # Reemplaza con tu URL real
