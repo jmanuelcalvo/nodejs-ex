@@ -21,8 +21,13 @@ steps:
 
 # Crear nueva app desde GitHub
 - script: |
-    oc new-app https://github.com/rcarneironet/nodejs-ex -l name=vssummit-app
-  displayName: 'Crear nueva app en OpenShift'
+    if oc get dc nodejs-ex >/dev/null 2>&1; then
+      echo "La app ya existe, no se ejecuta 'oc new-app'."
+    else
+      echo "La app no existe, creando..."
+      oc new-app https://github.com/rcarneironet/nodejs-ex -l name=vssummit-app
+    fi
+  displayName: 'Crear nueva app solo si no existe'
 
 # Iniciar build manual
 - script: |
