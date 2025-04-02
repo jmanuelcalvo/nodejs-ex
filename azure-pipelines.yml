@@ -1,28 +1,40 @@
-# Node.js
-# Build a general Node.js project with npm.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
-
 trigger:
 - master
 
 pool:
   vmImage: 'ubuntu-latest'
 
+variables:
+  OPENSHIFT_URL: 'https://api.tu-cluster:6443'   # Reemplaza con tu URL real
+  OPENSHIFT_TOKEN: '$(OPENSHIFT_TOKEN)'          # Configura como variable secreta
+  OPENSHIFT_NAMESPACE: 'default'                 # Cambia si usas otro namespace
+
 steps:
-- task: oc-cmd@2
-  inputs:
-    connectionType: 'OpenShift Connection Service'
-    openshiftService: 'os-conn'
-    #cmd: 'oc start-build nodejs-ex --follow'
-    cmd: 'oc new-app https://github.com/rcarneironet/nodejs-ex -l name=vssummit-app'
-- task: oc-cmd@2
-  inputs:
-    connectionType: 'OpenShift Connection Service'
-    openshiftService: 'os-conn'
-    cmd: 'oc start-build nodejs-ex --follow'    
-- task: oc-cmd@2
-  inputs:
-    connectionType: 'OpenShift Connection Service'
-    openshiftService: 'os-conn'
-    cmd: 'oc status'
+
+# Instalar el CLI de OpenShift (oc)
+- script: |
+    curl -LO https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz
+    tar -xzf openshift-client-linux.tar.gz
+    sudo mv oc /usr/local/bin/
+  displayName: 'Instalar oc CLI'
+
+# Login a OpenShift
+- script: |
+    oc login $(OPENSHIFT_URL) --token=$(OPENSHIFT_TOKEN) --insecure-skip-tls-verify
+    oc project $(OPENSHIFT_NAMESPACE)
+  displayName: 'Login en OpenShift'
+
+# Crear nueva app desde GitHub
+- script: |
+    oc new-app https://github.com/rcarneironet/nodejs-ex -l name=vssummit-app
+  displayName: 'Crear nueva app en OpenShift'
+
+# Iniciar build manual
+- script: |
+    oc start-build nodejs-ex --follow
+  displayName: 'Iniciar build'
+
+# Ver estado de la app
+- script: |
+    oc status
+  displayName: 'Ver estado del despliegue'
