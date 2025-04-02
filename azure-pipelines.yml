@@ -8,7 +8,7 @@ pool:
 
 variables:
   OPENSHIFT_URL: 'https://api.rm2.thpm.p1.openshiftapps.com:6443'   # Reemplaza con tu URL real
-  OPENSHIFT_TOKEN: 'sha256~u_njHpCey1gVAe1e-dkBb1af7bRIar16h4WS6F_d7rY'          # Configura como variable secreta
+  OPENSHIFT_TOKEN: '$(OPENSHIFT_TOKEN)'          # Configura como variable secreta
   OPENSHIFT_NAMESPACE: 'jcalvo-dev'                 # Cambia si usas otro namespace
 
 steps:
@@ -28,6 +28,12 @@ steps:
 - script: |
     oc start-build nodejs-ex --follow
   displayName: 'Iniciar build'
+
+# Publicar la ruta
+- script: |
+    oc expose svc nodejs-ex
+  displayName: 'Exponer el servicio a Internet'
+
 
 # Ver estado de la app
 - script: |
