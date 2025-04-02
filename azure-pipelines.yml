@@ -7,9 +7,9 @@ pool:
   name: Local Agent
 
 variables:
-  OPENSHIFT_URL: 'https://api.rm2.thpm.p1.openshiftapps.com:6443'   # Reemplaza con tu URL real
+  OPENSHIFT_URL: '$(OPENSHIFT_URL)'   # Reemplaza con tu URL real
   OPENSHIFT_TOKEN: '$(OPENSHIFT_TOKEN)'          # Configura como variable secreta
-  OPENSHIFT_NAMESPACE: 'jcalvo-dev'                 # Cambia si usas otro namespace
+  OPENSHIFT_NAMESPACE: '$(OPENSHIFT_NAMESPACE)'                 # Cambia si usas otro namespace
 
 steps:
 
