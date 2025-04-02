@@ -7,18 +7,11 @@ pool:
   name: Local Agent
 
 variables:
-  OPENSHIFT_URL: 'https://api.tu-cluster:6443'   # Reemplaza con tu URL real
-  OPENSHIFT_TOKEN: '$(OPENSHIFT_TOKEN)'          # Configura como variable secreta
-  OPENSHIFT_NAMESPACE: 'default'                 # Cambia si usas otro namespace
+  OPENSHIFT_URL: 'https://api.rm2.thpm.p1.openshiftapps.com:6443'   # Reemplaza con tu URL real
+  OPENSHIFT_TOKEN: 'sha256~u_njHpCey1gVAe1e-dkBb1af7bRIar16h4WS6F_d7rY'          # Configura como variable secreta
+  OPENSHIFT_NAMESPACE: 'jcalvo-dev'                 # Cambia si usas otro namespace
 
 steps:
-
-# Instalar el CLI de OpenShift (oc)
-- script: |
-    curl -LO https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz
-    tar -xzf openshift-client-linux.tar.gz
-    sudo mv oc /usr/local/bin/
-  displayName: 'Instalar oc CLI'
 
 # Login a OpenShift
 - script: |
